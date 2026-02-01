@@ -22,39 +22,34 @@ matchRouter.get("/", async (req, res) => {
     });
   }
 
- 
-
   const limit = Math.min(parsed.data.limit ?? 50, MAX_LIMIT);
 
   try {
     const data = await db
       .select()
       .from(matches)
-      .orderBy((desc(matches.createdAt)))
+      .orderBy(desc(matches.createdAt))
       .limit(limit);
 
-      res.json({data})
+    res.json({ data });
   } catch (e) {
-    res
-      .status(500)
-      .json({
-        error: "Failed to fetch matches",
-        details: e instanceof Error ? e.message : e,
-      });
+    res.status(500).json({
+      error: "Failed to fetch matches",
+      details: e instanceof Error ? e.message : e,
+    });
   }
 });
 
 matchRouter.post("/", async (req, res) => {
   const parsed = createMatchSchema.safeParse(req.body);
-  console.log(parsed);
+
   if (!parsed.success) {
     return res.status(400).json({
       error: "Invalid payload.",
-      details: JSON.stringify(parsed.error),
+      details: parsed.error.issues,
     });
   }
 
-  console.log(parsed.data);
   const { startTime, endTime, homeScore, awayScore } = parsed.data;
 
   try {
