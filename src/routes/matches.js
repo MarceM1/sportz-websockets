@@ -35,7 +35,7 @@ matchRouter.get("/", async (req, res) => {
   } catch (e) {
     res.status(500).json({
       error: "Failed to fetch matches",
-      details: e instanceof Error ? e.message : e,
+      details: "Internal server error.",
     });
   }
 });
@@ -69,7 +69,7 @@ matchRouter.post("/", async (req, res) => {
   } catch (e) {
     res.status(500).json({
       error: "Failed to create match.",
-      details: e instanceof Error ? e.message : e,
+      details: "Internal server error.",
     });
   }
 });
